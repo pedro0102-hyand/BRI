@@ -1,0 +1,16 @@
+[project]
+name = "bri-motor-busca"
+version = "0.1.0"
+description = "Trabalho de Busca e Recuperação de Informação (UFRRJ) - motores de busca com Whoosh e Elasticsearch"
+requires-python = ">=3.10"
+dependencies = [
+    "whoosh==2.7.4",
+    "elasticsearch==8.14.0",
+    "nltk==3.9.1",
+    "matplotlib==3.9.0",
+    "pandas==2.2.2",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

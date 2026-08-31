@@ -1,0 +1,5 @@
+whoosh==2.7.4
+elasticsearch==8.14.0
+nltk==3.9.1
+matplotlib==3.9.0
+pandas==2.2.2

@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Dados (coleção PAN-PC-2011 é pesada, não versionar)
+data/*
+!data/.gitkeep
+
+# Índices gerados
+whoosh_index/
+*.idx
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Sistema
+.DS_Store
