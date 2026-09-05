@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
 from config import REPORTS_DIR
 from top_bottom_words import load_frequencies
-
 OUTPUT_PATH = REPORTS_DIR / "zipf_distribution.png"
-
 
 if __name__ == "__main__":
     freq, total_words = load_frequencies()

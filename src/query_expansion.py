@@ -1,13 +1,14 @@
 import nltk
 from nltk.corpus import wordnet
 
+# Verifica se o WordNet está disponível, caso contrário, faz o download
 try:
     wordnet.synsets("test")
 except LookupError:
     nltk.download("wordnet")
     nltk.download("omw-1.4")
 
-
+# Função para obter sinônimos de uma palavra usando WordNet
 def get_synonyms(word: str, max_synonyms: int = 2) -> list[str]:
 
     synonyms = set()
@@ -20,7 +21,7 @@ def get_synonyms(word: str, max_synonyms: int = 2) -> list[str]:
             break
     return list(synonyms)[:max_synonyms]
 
-
+# Função para expandir uma lista de tokens com seus sinônimos
 def expand_tokens(tokens: list[str], max_synonyms: int = 2) -> list[str]:
 
     expanded = list(tokens)

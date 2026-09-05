@@ -1,23 +1,12 @@
-"""Otimização de busca: reduz cada subconsulta aos N termos mais raros
-(maior IDF / menor frequência de documento) antes de montar a query.
-
-Justificativa: termos comuns (mesmo sem serem stopwords) contribuem pouco
-para o ranking BM25 mas custam caro para o Whoosh combinar via OR. Manter
-só os termos mais discriminativos reduz o custo de busca e concentra a
-consulta no que de fato ajuda a diferenciar documentos - o mesmo princípio
-discutido na análise de Zipf da Parte 1.
-"""
 import time
 from whoosh import index, qparser, scoring
 from index_woosh import INDEX_DIR
 from extract_subqueries import extract_subqueries
 from data_loader import get_suspicious_queries
 
+# Função para selecionar os k termos mais raros (menor document frequency) de uma lista de tokens
 def select_top_terms(tokens: list[str], searcher, field: str = "content", k: int = 15) -> list[str]:
-    """Seleciona os k termos com menor frequência de documento (mais raros)
-    entre os tokens de uma subconsulta, usando as estatísticas já
-    calculadas pelo próprio índice.
-    """
+
     reader = searcher.reader()
     unique_tokens = set(tokens)
 
@@ -33,8 +22,8 @@ def select_top_terms(tokens: list[str], searcher, field: str = "content", k: int
 
 if __name__ == "__main__":
   
-    N_SAMPLES = 20
-    K_TERMS = 15
+    N_SAMPLES = 20 # número de subconsultas a testar
+    K_TERMS = 15 # número de termos mais raros a selecionar por subconsulta 
 
     ix = index.open_dir(str(INDEX_DIR))
     queries = get_suspicious_queries()

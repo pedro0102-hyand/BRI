@@ -6,7 +6,7 @@ from config import SUSPICIOUS_DIR
 from data_loader import build_filename_index
 from extract_subqueries import extract_subqueries
 
-
+# Função para pré-processar o texto: tokenização, remoção de stopwords, expansão de sinônimos e stemming
 def preprocess_b_expanded(text: str, max_synonyms: int = 2) -> list[str]:
 
     tokens = tokenize(text)
@@ -15,7 +15,7 @@ def preprocess_b_expanded(text: str, max_synonyms: int = 2) -> list[str]:
     tokens = stem(tokens)
     return tokens
 
-
+# Função para extrair subconsultas do texto
 def extract_subqueries_expanded(text: str, window_size: int = 5, stride: int = 3, max_synonyms: int = 2) -> list[list[str]]:
 
     sentences = split_sentences(text)

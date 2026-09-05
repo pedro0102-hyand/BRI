@@ -1,31 +1,26 @@
 import json
 from config import PAPERS_JSON, SOURCE_DIR, SUSPICIOUS_DIR
 
+# carregar e separar os metadados dos documentos
 def load_papers():
-    """Retorna a lista bruta de registros do papers.json."""
+
     with open(PAPERS_JSON, encoding="utf-8") as f:
         return json.load(f)
 
-
+# separar os documentos em fonte e suspeitos
 def split_documents(papers):
-    """Separa os registros em documentos fonte e suspeitos."""
+
     source = [p for p in papers if p["type"] == "source-document"]
     suspicious = [p for p in papers if p["type"] == "suspicious-document"]
     return source, suspicious
 
 
 def build_filename_index(root_dir):
-    """Mapeia filename -> caminho completo, varrendo as pastas partX/."""
     return {p.name: p for p in root_dir.glob("part*/*.txt")}
 
-
+# Função para obter os documentos suspeitos com seus caminhos
 def get_suspicious_queries():
-    """Retorna só os documentos suspeitos OFICIAIS (os que estão registrados
-    no papers.json com type=suspicious-document) - a pasta no disco pode ter
-    mais arquivos do que os 64 que de fato são consultas do trabalho.
 
-    Retorna lista de dicts: {filename, path, src_file (gabarito)}.
-    """
     papers = load_papers()
     _, suspicious_records = split_documents(papers)
     suspicious_index = build_filename_index(SUSPICIOUS_DIR)
@@ -46,6 +41,7 @@ def get_suspicious_queries():
 
 
 if __name__ == "__main__":
+    
     papers = load_papers()
     source, suspicious = split_documents(papers)
     print(f"Total de registros: {len(papers)}")

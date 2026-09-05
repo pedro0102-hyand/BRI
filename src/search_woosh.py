@@ -8,11 +8,11 @@ from extract_subqueries import extract_subqueries
 from index_woosh import INDEX_DIR
 from query_term_selection import select_top_terms
 
-K_TERMS = 15
-TOP_K_RESULTS = 10
+K_TERMS = 15 # número de termos mais raros a selecionar por subconsulta
+TOP_K_RESULTS = 10 # número de resultados a retornar por subconsulta (top-K)
 OUTPUT_PATH = REPORTS_DIR / "whoosh_combo7_results.json"
 
-
+# Função para buscar um documento suspeito no índice, agregando os scores das subconsultas
 def search_suspicious_document(searcher, parser, text: str) -> list[tuple[str, float]]:
 
     subqueries = extract_subqueries(text)
