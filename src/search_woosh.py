@@ -1,60 +1,63 @@
+import json
 import time
 from collections import defaultdict
 from whoosh import index, qparser, scoring
-from config import SUSPICIOUS_DIR
-from data_loader import build_filename_index, load_papers
-from index_woosh import INDEX_DIR
+from config import REPORTS_DIR
+from data_loader import get_suspicious_queries
 from extract_subqueries import extract_subqueries
+from index_woosh import INDEX_DIR
+from query_term_selection import select_top_terms
 
-# Função para buscar uma subconsulta no índice e retornar os resultados
-def search_subquery(searcher, parser, tokens: list[str], limit: int = 10):
+K_TERMS = 15
+TOP_K_RESULTS = 10
+OUTPUT_PATH = REPORTS_DIR / "whoosh_combo7_results.json"
 
-    if not tokens:
-        return []
-    
-    query = parser.parse(" ".join(tokens))
-    results = searcher.search(query, limit=limit)
-    return [(r["doc_id"], r.score) for r in results]
 
-# Função para buscar um documento suspeito no índice, agregando os scores das subconsultas
-def search_suspicious_document(ix, text: str, top_k: int = 10):
+def search_suspicious_document(searcher, parser, text: str) -> list[tuple[str, float]]:
 
     subqueries = extract_subqueries(text)
-    parser = qparser.QueryParser("content", schema=ix.schema, group=qparser.OrGroup)
     aggregated = defaultdict(float)
 
-    with ix.searcher(weighting=scoring.BM25F()) as searcher:
-        for tokens in subqueries:
-            for doc_id, score in search_subquery(searcher, parser, tokens):
-                aggregated[doc_id] += score
+    for tokens in subqueries:
+        top_terms = select_top_terms(tokens, searcher, k=K_TERMS)
+        if not top_terms:
+            continue
+        query = parser.parse(" ".join(top_terms))
+        for r in searcher.search(query, limit=TOP_K_RESULTS):
+            aggregated[r["doc_id"]] += r.score
 
     ranked = sorted(aggregated.items(), key=lambda x: x[1], reverse=True)
-    return ranked[:top_k]
+    return ranked[:TOP_K_RESULTS]
 
 
 if __name__ == "__main__":
-
     ix = index.open_dir(str(INDEX_DIR))
-    suspicious_index = build_filename_index(SUSPICIOUS_DIR)
-    sample_name, sample_path = next(iter(suspicious_index.items()))
+    parser = qparser.QueryParser("content", schema=ix.schema, group=qparser.OrGroup)
+    queries = get_suspicious_queries()
 
-    with open(sample_path, encoding="utf-8", errors="ignore") as f:
-        text = f.read()
+    print(f"Buscando {len(queries)} documentos suspeitos (combinação 7)...")
+    results = {}
 
-    print(f"Documento de teste: {sample_name}")
     start = time.perf_counter()
-    ranking = search_suspicious_document(ix, text, top_k=10)
-    elapsed = time.perf_counter() - start
+    with ix.searcher(weighting=scoring.BM25F()) as searcher:
+        for i, q in enumerate(queries, start=1):
+            with open(q["path"], encoding="utf-8", errors="ignore") as f:
+                text = f.read()
 
-    print(f"Busca concluída em {elapsed:.1f}s")
-    print("\nTop 10 documentos-fonte recuperados (doc_id, score agregado):")
-    for doc_id, score in ranking:
-        print(f"  {doc_id}: {score:.2f}")
+            doc_start = time.perf_counter()
+            ranking = search_suspicious_document(searcher, parser, text)
+            doc_elapsed = time.perf_counter() - doc_start
 
-    papers = load_papers()
-    entry = next(p for p in papers if p["filename"] == sample_name)
-    true_sources = set(entry["src_file"])
-    retrieved = {doc_id for doc_id, _ in ranking}
-    hits = true_sources & retrieved
-    print(f"\nFontes verdadeiras (gabarito): {len(true_sources)}")
-    print(f"Acertos no top 10: {len(hits)} -> {hits}")
+            results[q["filename"]] = ranking
+            elapsed_total = time.perf_counter() - start
+            print(f"  [{i}/{len(queries)}] {q['filename']}: "
+                  f"{doc_elapsed:.1f}s (total até agora: {elapsed_total / 60:.1f}min)")
+
+    total_elapsed = time.perf_counter() - start
+
+    REPORTS_DIR.mkdir(exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2)
+
+    print(f"\nConcluído em {total_elapsed / 60:.1f} minutos")
+    print(f"Resultados salvos em: {OUTPUT_PATH}")
