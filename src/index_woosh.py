@@ -13,7 +13,10 @@ SCHEMA = Schema(doc_id=ID(stored=True, unique=True),content=TEXT(analyzer=Simple
 # Função para construir o índice de documentos-fonte usando Whoosh
 def build_index():
 
+    # Criar o diretório do índice, se não existir
     INDEX_DIR.mkdir(exist_ok=True)
+
+    # Criar o índice com o esquema definidos
     ix = index.create_in(str(INDEX_DIR), SCHEMA)
     writer = ix.writer(limitmb=512, procs=1)
 
@@ -22,7 +25,10 @@ def build_index():
     total = len(source_index)
     print(f"Indexando {total} documentos-fonte...")
 
+    # Medir o tempo de indexação
     start = time.perf_counter()
+
+    # Iterar sobre os documentos-fonte, pré-processar o conteúdo e adicionar ao índice
     for i, (filename, path) in enumerate(source_index.items(), start=1):
         with open(path, encoding="utf-8", errors="ignore") as f:
             text = f.read()

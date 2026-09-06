@@ -3,24 +3,30 @@ from config import SUSPICIOUS_DIR
 from data_loader import build_filename_index
 from nltk.tokenize import sent_tokenize
 
+# Verificar se o pacote "punkt_tab" está disponível, caso contrário, fazer o download
 try:
     nltk.data.find("tokenizers/punkt_tab")
 except LookupError:
     nltk.download("punkt_tab")
 
+# Função para dividir o texto em sentenças
 def split_sentences(text: str) -> list[str]:
     return sent_tokenize(text)
 
-
+# Função para criar janelas deslizantes
 def make_windows(sentences: list[str], window_size: int = 5, stride: int = 3) -> list[str]:
     windows = []
+
+    # Criar janelas deslizantes com base no tamanho da janela e no passos
     for start in range(0, len(sentences), stride):
+
         block = sentences[start:start + window_size]
         if not block:
             break
         windows.append(" ".join(block))
         if start + window_size >= len(sentences):
             break
+
     return windows
 
 

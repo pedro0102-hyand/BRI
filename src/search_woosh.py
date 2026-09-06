@@ -15,9 +15,10 @@ OUTPUT_PATH = REPORTS_DIR / "whoosh_combo7_results.json"
 # Função para buscar um documento suspeito no índice, agregando os scores das subconsultas
 def search_suspicious_document(searcher, parser, text: str) -> list[tuple[str, float]]:
 
-    subqueries = extract_subqueries(text)
-    aggregated = defaultdict(float)
+    subqueries = extract_subqueries(text) # extrair subconsultas do texto
+    aggregated = defaultdict(float) # dicionário para armazenar os scores agregados por doc_id
 
+    # Iterar sobre as subconsultas, selecionar os termos mais raros e buscar no índice
     for tokens in subqueries:
         top_terms = select_top_terms(tokens, searcher, k=K_TERMS)
         if not top_terms:
@@ -26,11 +27,13 @@ def search_suspicious_document(searcher, parser, text: str) -> list[tuple[str, f
         for r in searcher.search(query, limit=TOP_K_RESULTS):
             aggregated[r["doc_id"]] += r.score
 
+    # Classificar os resultados agregados por score e retornar os top-K resultados
     ranked = sorted(aggregated.items(), key=lambda x: x[1], reverse=True)
     return ranked[:TOP_K_RESULTS]
 
 
 if __name__ == "__main__":
+    
     ix = index.open_dir(str(INDEX_DIR))
     parser = qparser.QueryParser("content", schema=ix.schema, group=qparser.OrGroup)
     queries = get_suspicious_queries()

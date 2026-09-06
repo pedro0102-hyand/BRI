@@ -14,7 +14,7 @@ def split_documents(papers):
     suspicious = [p for p in papers if p["type"] == "suspicious-document"]
     return source, suspicious
 
-
+# construir um índice de nomes de arquivos para os documentos suspeitos
 def build_filename_index(root_dir):
     return {p.name: p for p in root_dir.glob("part*/*.txt")}
 
@@ -25,8 +25,10 @@ def get_suspicious_queries():
     _, suspicious_records = split_documents(papers)
     suspicious_index = build_filename_index(SUSPICIOUS_DIR)
 
-    queries = []
+    queries = [] # Lista para armazenar os documentos suspeitos com seus caminhos
+
     for record in suspicious_records:
+
         filename = record["filename"]
         path = suspicious_index.get(filename)
         if path is None:
@@ -37,6 +39,7 @@ def get_suspicious_queries():
             "path": path,
             "src_file": record["src_file"],
         })
+
     return queries
 
 
