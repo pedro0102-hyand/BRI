@@ -1,6 +1,6 @@
 import time
 from whoosh import index, qparser, scoring
-from index_woosh import INDEX_DIR
+from index_whoosh import INDEX_DIR
 from extract_subqueries import extract_subqueries
 from data_loader import get_suspicious_queries
 

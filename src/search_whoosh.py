@@ -4,24 +4,22 @@ from collections import defaultdict
 from whoosh import index, qparser, scoring
 from config import REPORTS_DIR
 from data_loader import get_suspicious_queries
-from extract_subqueries_expanded import extract_subqueries_expanded
-from index_woosh import INDEX_DIR
+from extract_subqueries import extract_subqueries
+from index_whoosh import INDEX_DIR
 from query_term_selection import select_top_terms
 
-K_TERMS = 15 # Número de termos selecionados por subconsulta
-TOP_K_RESULTS = 10 # Número de resultados retornados por documento suspeito
-OUTPUT_PATH = REPORTS_DIR / "whoosh_combo8_results.json"
+K_TERMS = 15 # número de termos mais raros a selecionar por subconsulta
+TOP_K_RESULTS = 10 # número de resultados a retornar por subconsulta (top-K)
+OUTPUT_PATH = REPORTS_DIR / "whoosh_combo7_results.json"
 
-# Função para buscar documentos suspeitos no índice
+# Função para buscar um documento suspeito no índice, agregando os scores das subconsultas
 def search_suspicious_document(searcher, parser, text: str) -> list[tuple[str, float]]:
 
-    # Extração de subconsultas com expansao de termos
-    subqueries = extract_subqueries_expanded(text)
-    aggregated = defaultdict(float)
+    subqueries = extract_subqueries(text) # extrair subconsultas do texto
+    aggregated = defaultdict(float) # dicionário para armazenar os scores agregados por doc_id
 
-    # Para cada subconsulta, seleciona os top K termos e realiza a busca no índice
+    # Iterar sobre as subconsultas, selecionar os termos mais raros e buscar no índice
     for tokens in subqueries:
-
         top_terms = select_top_terms(tokens, searcher, k=K_TERMS)
         if not top_terms:
             continue
@@ -29,18 +27,18 @@ def search_suspicious_document(searcher, parser, text: str) -> list[tuple[str, f
         for r in searcher.search(query, limit=TOP_K_RESULTS):
             aggregated[r["doc_id"]] += r.score
 
-    # Ordena os resultados agregados por score decrescente 
+    # Classificar os resultados agregados por score e retornar os top-K resultados
     ranked = sorted(aggregated.items(), key=lambda x: x[1], reverse=True)
     return ranked[:TOP_K_RESULTS]
 
 
 if __name__ == "__main__":
-    
+
     ix = index.open_dir(str(INDEX_DIR))
     parser = qparser.QueryParser("content", schema=ix.schema, group=qparser.OrGroup)
     queries = get_suspicious_queries()
 
-    print(f"Buscando {len(queries)} documentos suspeitos (combinação 8, com expansão)...")
+    print(f"Buscando {len(queries)} documentos suspeitos (combinação 7)...")
     results = {}
 
     start = time.perf_counter()
