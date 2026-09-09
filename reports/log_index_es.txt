@@ -1,0 +1,7 @@
+Índice 'bri_combo_b' criado.
+Indexando 11093 documentos-fonte via Bulk API...
+/Users/pedrojuliosilvasucupira/Desktop/BRI.R/src/index_elasticsearch.py:65: DeprecationWarning: Passing transport options in the API method is deprecated. Use 'Elasticsearch.options()' instead.
+  success, errors = bulk(
+
+Indexação concluída em 1404.9s (0.127s/doc)
+Documentos indexados com sucesso: 11093
