@@ -1,0 +1,8 @@
+{
+  "amostra_documentos": 500,
+  "preprocessamento_isolado_s_por_doc": 0.1279,
+  "whoosh_total_s_por_doc": 0.1587,
+  "elasticsearch_total_s_por_doc": 0.1266,
+  "whoosh_so_indexacao_s_por_doc": 0.0308,
+  "elasticsearch_so_indexacao_s_por_doc": -0.0013
+}
