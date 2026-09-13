@@ -438,9 +438,4 @@ A arquitetura também segue a lógica da disciplina de recuperação de informa�
 
 ---
 
-Se você quiser, no próximo passo posso complementar este README com:
 
-- seção de resultados em gráfico;
-- instruções específicas para rodar cada script em ordem;
-- pequenas capturas de tela do fluxo em terminal;
-- versão mais curta para GitHub + versão completa para relatório acadêmico.
