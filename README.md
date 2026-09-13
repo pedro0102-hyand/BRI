@@ -417,24 +417,7 @@ python src/search_elasticsearch.py
 ```bash
 python src/metrics.py
 ```
-
-## 10. Fluxo geral do pipeline
-
-```mermaid
-flowchart LR
-    A[Dados PAN Corpus] --> B[Leitura e metadados]
-    B --> C[Pré-processamento]
-    C --> D[Janela deslizante]
-    D --> E[Subconsultas]
-    E --> F[Seleção de termos]
-    F --> G[Whoosh / Elasticsearch]
-    G --> H[Ranking de documentos]
-    H --> I[Agregação por documento]
-    I --> J[Precision@k / Recall@k]
-    J --> K[Relatório final em JSON]
-```
-
-## 11. Principais conclusões
+## 10. Principais conclusões
 
 - O projeto validou o uso de subconsultas como estratégia de recuperação para documentos suspeitos;
 - o processo de selecionar termos mais raros melhorou a discriminação dentro de cada janela;
@@ -442,7 +425,7 @@ flowchart LR
 - o Elasticsearch ficou melhor em precisão e recall no experimento mais relevante;
 - a comparação entre os dois motores mostrou que a arquitetura da busca e a forma de construção das subconsultas têm impacto direto no desempenho.
 
-## 12. Observações finais
+## 11. Observações finais
 
 Este projeto foi estruturado para ser didático e extensível. O código está dividido em módulos curtos e tem funções bem isoladas, o que facilita:
 
