@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitetura do fluxo do projeto BRI.R</title>
+  <desc id="desc">Diagrama mostrando leitura do corpus, pré-processamento, janelas deslizantes, indexação, busca e avaliação.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .title { font: 700 30px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 600 18px 'Segoe UI', Arial, sans-serif; fill: #334155; }
+      .box { fill: #ffffff; stroke: #94a3b8; stroke-width: 2; rx: 18; }
+      .step { fill: #e2e8f0; stroke: #475569; stroke-width: 2; }
+      .accent { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; }
+      .success { fill: #dcfce7; stroke: #16a34a; stroke-width: 2; }
+      .warning { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+      .label { font: 600 17px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .small { font: 500 14px 'Segoe UI', Arial, sans-serif; fill: #334155; }
+      .arrow { stroke: #334155; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#334155" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="760"/>
+  <text x="600" y="55" text-anchor="middle" class="title">Pipeline de Busca e Recuperação de Informação</text>
+
+  <!-- Etapas principais -->
+  <rect class="box accent" x="60" y="110" width="170" height="110"/>
+  <text x="145" y="150" text-anchor="middle" class="label">1. Dados PAN</text>
+  <text x="145" y="180" text-anchor="middle" class="small">source-document</text>
+  <text x="145" y="200" text-anchor="middle" class="small">suspicious-document</text>
+
+  <path class="arrow" d="M230 165 H290"/>
+
+  <rect class="box step" x="290" y="110" width="170" height="110"/>
+  <text x="375" y="150" text-anchor="middle" class="label">2. Leitura</text>
+  <text x="375" y="180" text-anchor="middle" class="small">papers.json</text>
+  <text x="375" y="200" text-anchor="middle" class="small">metadados</text>
+
+  <path class="arrow" d="M460 165 H520"/>
+
+  <rect class="box step" x="520" y="110" width="180" height="110"/>
+  <text x="610" y="150" text-anchor="middle" class="label">3. Pré-process.</text>
+  <text x="610" y="180" text-anchor="middle" class="small">lowercase</text>
+  <text x="610" y="200" text-anchor="middle" class="small">stopwords + stemming</text>
+
+  <path class="arrow" d="M700 165 H760"/>
+
+  <rect class="box success" x="760" y="110" width="200" height="110"/>
+  <text x="860" y="150" text-anchor="middle" class="label">4. Indexação</text>
+  <text x="860" y="180" text-anchor="middle" class="small">Whoosh / Elasticsearch</text>
+  <text x="860" y="200" text-anchor="middle" class="small">BM25 + textos indexados</text>
+
+  <!-- Buscas -->
+  <rect class="box warning" x="180" y="350" width="220" height="120"/>
+  <text x="290" y="390" text-anchor="middle" class="label">5. Documento suspeito</text>
+  <text x="290" y="420" text-anchor="middle" class="small">extração de janelas</text>
+  <text x="290" y="445" text-anchor="middle" class="small">subconsultas por trechos</text>
+
+  <path class="arrow" d="M400 410 H500"/>
+
+  <rect class="box warning" x="500" y="350" width="220" height="120"/>
+  <text x="610" y="390" text-anchor="middle" class="label">6. Seleção de termos</text>
+  <text x="610" y="420" text-anchor="middle" class="small">top-k mais raros</text>
+  <text x="610" y="445" text-anchor="middle" class="small">opcional: expansão por sinônimos</text>
+
+  <path class="arrow" d="M720 410 H820"/>
+
+  <rect class="box accent" x="820" y="350" width="220" height="120"/>
+  <text x="930" y="390" text-anchor="middle" class="label">7. Busca</text>
+  <text x="930" y="420" text-anchor="middle" class="small">ranking por score</text>
+  <text x="930" y="445" text-anchor="middle" class="small">agregação entre subconsultas</text>
+
+  <!-- Avaliação -->
+  <rect class="box success" x="430" y="560" width="340" height="120"/>
+  <text x="600" y="600" text-anchor="middle" class="label">8. Avaliação</text>
+  <text x="600" y="630" text-anchor="middle" class="small">Precision@k e Recall@k</text>
+  <text x="600" y="655" text-anchor="middle" class="small">comparação Whoosh vs Elasticsearch</text>
+
+  <path class="arrow" d="M600 470 V560"/>
+
+</svg>

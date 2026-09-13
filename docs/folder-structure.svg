@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="760" viewBox="0 0 1100 760" role="img" aria-labelledby="title desc">
+  <title id="title">Estrutura de pastas e arquivos do projeto BRI.R</title>
+  <desc id="desc">Diagrama das pastas e arquivos principais do projeto: dados, fontes, relatórios e métricas.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .title { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .folder { fill: #dbeafe; stroke: #2563eb; stroke-width: 2; }
+      .file { fill: #ffffff; stroke: #64748b; stroke-width: 2; }
+      .label { font: 600 16px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .small { font: 500 13px 'Segoe UI', Arial, sans-serif; fill: #334155; }
+      .arrow { stroke: #475569; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1100" height="760"/>
+  <text x="550" y="48" text-anchor="middle" class="title">Estrutura do Projeto</text>
+
+  <rect class="folder" x="120" y="90" width="200" height="90" rx="12"/>
+  <text x="220" y="130" text-anchor="middle" class="label">BRI.R</text>
+  <text x="220" y="152" text-anchor="middle" class="small">raiz do projeto</text>
+
+  <path class="arrow" d="M320 135 H390"/>
+
+  <rect class="folder" x="390" y="50" width="220" height="110" rx="12"/>
+  <text x="500" y="90" text-anchor="middle" class="label">data/</text>
+  <text x="500" y="112" text-anchor="middle" class="small">corpus PAN</text>
+  <text x="500" y="135" text-anchor="middle" class="small">source + suspicious</text>
+
+  <rect class="folder" x="390" y="180" width="220" height="110" rx="12"/>
+  <text x="500" y="220" text-anchor="middle" class="label">src/</text>
+  <text x="500" y="242" text-anchor="middle" class="small">pré-processamento</text>
+  <text x="500" y="265" text-anchor="middle" class="small">indexação + busca</text>
+
+  <rect class="folder" x="390" y="310" width="220" height="110" rx="12"/>
+  <text x="500" y="350" text-anchor="middle" class="label">reports/</text>
+  <text x="500" y="372" text-anchor="middle" class="small">resultados JSON</text>
+  <text x="500" y="395" text-anchor="middle" class="small">métricas consolidadas</text>
+
+  <rect class="folder" x="390" y="440" width="220" height="110" rx="12"/>
+  <text x="500" y="480" text-anchor="middle" class="label">whoosh_index/</text>
+  <text x="500" y="502" text-anchor="middle" class="small">índice gerado</text>
+  <text x="500" y="525" text-anchor="middle" class="small">Whoosh em disco</text>
+
+  <rect class="file" x="690" y="75" width="270" height="40" rx="10"/>
+  <text x="825" y="101" text-anchor="middle" class="small">papers.json</text>
+
+  <rect class="file" x="690" y="140" width="270" height="40" rx="10"/>
+  <text x="825" y="166" text-anchor="middle" class="small">config.py</text>
+
+  <rect class="file" x="690" y="205" width="270" height="40" rx="10"/>
+  <text x="825" y="231" text-anchor="middle" class="small">preprocess_b.py</text>
+
+  <rect class="file" x="690" y="270" width="270" height="40" rx="10"/>
+  <text x="825" y="296" text-anchor="middle" class="small">index_whoosh.py</text>
+
+  <rect class="file" x="690" y="335" width="270" height="40" rx="10"/>
+  <text x="825" y="361" text-anchor="middle" class="small">search_whoosh.py</text>
+
+  <rect class="file" x="690" y="400" width="270" height="40" rx="10"/>
+  <text x="825" y="426" text-anchor="middle" class="small">metrics.py</text>
+
+  <rect class="file" x="690" y="465" width="270" height="40" rx="10"/>
+  <text x="825" y="491" text-anchor="middle" class="small">metricas_consolidadas.json</text>
+
+  <rect class="file" x="690" y="530" width="270" height="40" rx="10"/>
+  <text x="825" y="556" text-anchor="middle" class="small">README.md</text>
+
+</svg>
